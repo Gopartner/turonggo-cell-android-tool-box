@@ -4,11 +4,11 @@
 //! dijalankan dari terminal (spd-cli), diuji dengan `cargo test`,
 //! dan dipakai ulang oleh frontend desktop (Tauri) melalui IPC.
 
-pub mod error;
-pub mod transport;
-pub mod proto;
 pub mod chipdb;
 pub mod core;
+pub mod error;
+pub mod proto;
+pub mod transport;
 
 pub use error::{Error, Result};
 pub use transport::{Transport, TransportError};

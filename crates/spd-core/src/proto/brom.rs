@@ -235,9 +235,6 @@ mod tests {
 
         let pkt64 = select_partition("super", 0x1_0000_0000, true);
         assert_eq!(pkt64.len(), 72 + 16);
-        assert_eq!(
-            u32::from_le_bytes(pkt64[76..80].try_into().unwrap()),
-            0x1
-        );
+        assert_eq!(u32::from_le_bytes(pkt64[76..80].try_into().unwrap()), 0x1);
     }
 }

@@ -7,9 +7,7 @@
 use std::collections::VecDeque;
 
 use super::{Transport, TransportError};
-use crate::proto::brom::{
-    self, name_from_utf16le, Partition,
-};
+use crate::proto::brom::{self, name_from_utf16le, Partition};
 use crate::proto::framing::{self, Message, MessageDecoder};
 
 /// Skenario jawaban yang didukung mock.
@@ -236,8 +234,13 @@ mod tests {
     #[test]
     fn mock_read_partition_returns_table() {
         let mut t = MockTransport::new(vec![part("boot", 64), part("nv", 2)]);
-        t.write(&encode_message(brom::BSL_CMD_READ_PARTITION, &[], true, true))
-            .unwrap();
+        t.write(&encode_message(
+            brom::BSL_CMD_READ_PARTITION,
+            &[],
+            true,
+            true,
+        ))
+        .unwrap();
         let mut buf = [0u8; 1024];
         let n = t.read(&mut buf, 100).unwrap();
         let mut dec = MessageDecoder::new(true, true);
@@ -258,8 +261,13 @@ mod tests {
         let sel = name_to_utf16le("nv");
         let mut payload = sel;
         payload.extend_from_slice(&(1u32 << 20).to_le_bytes());
-        t.write(&encode_message(brom::BSL_CMD_READ_START, &payload, true, true))
-            .unwrap();
+        t.write(&encode_message(
+            brom::BSL_CMD_READ_START,
+            &payload,
+            true,
+            true,
+        ))
+        .unwrap();
 
         // read_midst 16 byte dari offset 0
         let mut mp = Vec::new();

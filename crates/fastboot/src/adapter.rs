@@ -68,18 +68,16 @@ impl FastbootAdapter {
         let raw = self.getvar(serial, &format!("partition-size:{name}"))?;
         let Some(raw) = raw else { return Ok(None) };
         let hex = raw.trim().trim_start_matches("0x");
-        let parsed = u64::from_str_radix(hex, 16).map_err(|_| {
-            Error::Tool(format!("ukuran partisi tidak valid: {raw}"))
-        })?;
+        let parsed = u64::from_str_radix(hex, 16)
+            .map_err(|_| Error::Tool(format!("ukuran partisi tidak valid: {raw}")))?;
         Ok(Some(parsed))
     }
 
     /// Flash partisi dengan validasi ukuran (FB-02): menolak bila file melebihi
     /// ukuran partisi yang dilaporkan device.
     pub fn flash(&self, serial: &str, partition: &str, file: &Path) -> Result<()> {
-        let meta = std::fs::metadata(file).map_err(|e| {
-            Error::Device(format!("file {file:?} tidak terbaca: {e}"))
-        })?;
+        let meta = std::fs::metadata(file)
+            .map_err(|e| Error::Device(format!("file {file:?} tidak terbaca: {e}")))?;
         if let Some(max) = self.partition_size(serial, partition)? {
             if meta.len() > max {
                 return Err(Error::Device(format!(
@@ -132,11 +130,8 @@ mod tests {
 
     fn write_fake_fastboot(script: &str) -> String {
         let seq = TEST_SEQ.fetch_add(1, Ordering::SeqCst);
-        let dir = std::env::temp_dir().join(format!(
-            "fastboot_test_{}_{}",
-            std::process::id(),
-            seq
-        ));
+        let dir =
+            std::env::temp_dir().join(format!("fastboot_test_{}_{}", std::process::id(), seq));
         fs::create_dir_all(&dir).unwrap();
         let path = dir.join("fastboot.cmd");
         let mut f = fs::File::create(&path).unwrap();
@@ -218,9 +213,8 @@ mod tests {
 
     #[test]
     fn reboot_okay() {
-        let fake = write_fake_fastboot(
-            "@echo off\r\nif \"%3\"==\"reboot\" echo Rebooting OKAY\r\n",
-        );
+        let fake =
+            write_fake_fastboot("@echo off\r\nif \"%3\"==\"reboot\" echo Rebooting OKAY\r\n");
         let adapter = FastbootAdapter::new(fake);
         adapter.reboot("R5CX123").unwrap();
     }

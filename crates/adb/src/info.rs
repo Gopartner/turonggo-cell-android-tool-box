@@ -44,9 +44,8 @@ pub struct AdbDeviceInfo {
 impl AdbDeviceInfo {
     /// Bangun info dari map getprop; key kosong dianggap tidak ada.
     pub fn from_props(serial: &str, props: &HashMap<String, String>) -> Self {
-        let prop = |key: &str| -> Option<String> {
-            props.get(key).filter(|v| !v.is_empty()).cloned()
-        };
+        let prop =
+            |key: &str| -> Option<String> { props.get(key).filter(|v| !v.is_empty()).cloned() };
         AdbDeviceInfo {
             serial: serial.to_string(),
             manufacturer: prop("ro.product.manufacturer"),
@@ -76,9 +75,18 @@ mod tests {
             "bukan_baris_prop\n",
         );
         let props = parse_getprop(out);
-        assert_eq!(props.get("ro.build.version.release").map(String::as_str), Some("13"));
-        assert_eq!(props.get("ro.product.manufacturer").map(String::as_str), Some("Realme"));
-        assert_eq!(props.get("persist.vendor.power").map(String::as_str), Some(""));
+        assert_eq!(
+            props.get("ro.build.version.release").map(String::as_str),
+            Some("13")
+        );
+        assert_eq!(
+            props.get("ro.product.manufacturer").map(String::as_str),
+            Some("Realme")
+        );
+        assert_eq!(
+            props.get("persist.vendor.power").map(String::as_str),
+            Some("")
+        );
         assert!(props.len() == 4);
     }
 
@@ -97,7 +105,10 @@ mod tests {
         props.insert("ro.product.device".into(), "RE5D4L".into());
         props.insert("ro.build.version.release".into(), "13".into());
         props.insert("ro.build.fingerprint".into(), "realme/RMX3760".into());
-        props.insert("ro.build.version.security_patch".into(), "2024-01-05".into());
+        props.insert(
+            "ro.build.version.security_patch".into(),
+            "2024-01-05".into(),
+        );
         props.insert("persist.vendor.empty".into(), "".into());
 
         let info = AdbDeviceInfo::from_props("R5CX123", &props);

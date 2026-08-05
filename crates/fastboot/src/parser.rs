@@ -87,7 +87,10 @@ mod tests {
         assert_eq!(devices.len(), 2);
         assert_eq!(devices[0].state, "fastbootd");
         assert_eq!(devices[1].state, "fastboot");
-        assert_eq!(devices[1].extra, vec![("usb".to_string(), "1-2".to_string())]);
+        assert_eq!(
+            devices[1].extra,
+            vec![("usb".to_string(), "1-2".to_string())]
+        );
     }
 
     #[test]
