@@ -7,6 +7,7 @@
 Desktop app · Tauri 2 + React + TypeScript + Rust
 
 [![CI](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/ci.yml/badge.svg)](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/ci.yml)
+[![Build Production](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/build.yml/badge.svg)](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/build.yml)
 [![Release](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/release.yml/badge.svg)](https://github.com/Gopartner/turonggo-cell-android-tool-box/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Rust](https://img.shields.io/badge/Rust-1.97+-orange)

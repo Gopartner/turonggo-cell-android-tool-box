@@ -72,3 +72,6 @@ Ketidaksesuaian/masukan API dibahas lewat **Issue**.
   update changelog, buat GitHub Release.
 - Tag otomatis: `v0.1.x`. Binary Windows (.exe NSIS) di-build di workflow
   `release.yml` dan dilampirkan ke Release.
+- **Build production** (`build.yml`) berjalan **setiap push ke `main`** (bukan
+  branch lain): hasil binary di-upload sebagai artifact di tab Actions
+  (`spd-backup-tool-windows`), tersimpan 14 hari.
