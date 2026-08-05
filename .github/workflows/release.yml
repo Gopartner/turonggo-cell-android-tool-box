@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
-          package-name: spd-backup-tool
+          package-name: turonggo-cell-android-tool-box
           changelog-types: >
             [{"type":"feat","section":"Fitur baru","hidden":false},
              {"type":"fix","section":"Perbaikan bug","hidden":false},
