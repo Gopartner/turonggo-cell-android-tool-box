@@ -1,0 +1,13 @@
+[package]
+name = "spd-core"
+version = "0.1.0"
+edition = "2021"
+description = "Inti logika backup/restore Unisoc: protokol BROM/FDL, transport, chipdb, manifest. Murni library, tanpa dependensi Tauri."
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = "0.10"
+thiserror = "2"
+
+[dev-dependencies]

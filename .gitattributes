@@ -1,0 +1,17 @@
+# Normalisasi line ending: repo selalu LF, checkout sesuai OS
+* text=auto
+
+# File Rust/TS/JSON/MD selalu LF di repo
+*.rs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# File biner tidak diubah
+*.png binary
+*.ico binary
+*.icns binary

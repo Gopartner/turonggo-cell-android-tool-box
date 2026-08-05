@@ -1,0 +1,10 @@
+[package]
+name = "adb"
+version = "0.1.0"
+edition = "2021"
+description = "ADB adapter (PRD §8 Tool Adapter): jalankan binary adb eksternal via Command, parse output menjadi struct. Murni library."
+
+[dependencies]
+app-core = { path = "../app-core" }
+serde = { workspace = true }
+thiserror = "2"

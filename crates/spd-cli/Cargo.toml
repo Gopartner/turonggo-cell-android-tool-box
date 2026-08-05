@@ -1,0 +1,13 @@
+[package]
+name = "spd-cli"
+version = "0.1.0"
+edition = "2021"
+description = "CLI terminal untuk backup/restore firmware Unisoc (backend spd-core)."
+
+[dependencies]
+spd-core = { path = "../spd-core" }
+app-core = { path = "../app-core" }
+adb = { path = "../adb" }
+fastboot = { path = "../fastboot" }
+serde = { workspace = true }
+serde_json = { workspace = true }

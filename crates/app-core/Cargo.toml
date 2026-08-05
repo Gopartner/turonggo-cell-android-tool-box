@@ -1,0 +1,11 @@
+[package]
+name = "app-core"
+version = "0.1.0"
+edition = "2021"
+description = "Application Core: deteksi device, adapter tool eksternal (ADB/Fastboot), job manager, validasi. Murni library, tanpa dependensi Tauri."
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = "2"
+spd-core = { path = "../spd-core" }
