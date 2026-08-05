@@ -68,15 +68,11 @@ impl Session {
 
     /// Kirim pesan ter-encode. `check_baud=true` mengirim barisan 0x7E polos.
     pub fn send(&mut self, msg_type: u16, payload: &[u8]) -> Result<()> {
-        let raw = framing::encode_message(msg_type, payload, self.flags.crc16, self.flags.transcode);
-        self.transport
-            .write(&raw)
-            .map_err(crate::Error::from)?;
+        let raw =
+            framing::encode_message(msg_type, payload, self.flags.crc16, self.flags.transcode);
+        self.transport.write(&raw).map_err(crate::Error::from)?;
         if self.verbose {
-            eprintln!(
-                "send: type=0x{msg_type:04x}, len={}",
-                payload.len()
-            );
+            eprintln!("send: type=0x{msg_type:04x}, len={}", payload.len());
         }
         Ok(())
     }
@@ -84,9 +80,7 @@ impl Session {
     /// Kirim CHECK_BAUD (deretan 0x7E).
     fn send_check_baud(&mut self, len: usize) -> Result<()> {
         let raw = vec![framing::HDLC_HEADER; len];
-        self.transport
-            .write(&raw)
-            .map_err(crate::Error::from)?;
+        self.transport.write(&raw).map_err(crate::Error::from)?;
         Ok(())
     }
 
@@ -105,7 +99,11 @@ impl Session {
             if !msgs.is_empty() {
                 let msg = msgs.remove(0);
                 if self.verbose {
-                    eprintln!("recv: type=0x{:04x}, len={}", msg.msg_type, msg.payload.len());
+                    eprintln!(
+                        "recv: type=0x{:04x}, len={}",
+                        msg.msg_type,
+                        msg.payload.len()
+                    );
                 }
                 return Ok(msg);
             }
@@ -257,8 +255,7 @@ impl Session {
             if msg.payload.len() < 12 {
                 return Err(crate::protocol_err!("nv probe payload too short"));
             }
-            let nv_len =
-                u32::from_le_bytes(msg.payload[8..12].try_into().unwrap()) as u64;
+            let nv_len = u32::from_le_bytes(msg.payload[8..12].try_into().unwrap()) as u64;
             len = 0x200 + nv_len;
             self.send_and_check(brom::BSL_CMD_READ_END, &[])?;
         }
@@ -286,9 +283,7 @@ impl Session {
             }
             let nread = msg.payload.len();
             if n < nread {
-                return Err(crate::protocol_err!(
-                    "unexpected length ({nread} > {n})"
-                ));
+                return Err(crate::protocol_err!("unexpected length ({nread} > {n})"));
             }
             writer.write_all(&msg.payload)?;
             offset += nread as u64;
@@ -318,12 +313,7 @@ impl Session {
     }
 
     /// Tulis file ke partisi.
-    pub fn write_partition(
-        &mut self,
-        name: &str,
-        data: &[u8],
-        step: usize,
-    ) -> Result<()> {
+    pub fn write_partition(&mut self, name: &str, data: &[u8], step: usize) -> Result<()> {
         let mode64 = (data.len() as u64) >> 32 != 0;
         let sel = brom::select_partition(name, data.len() as u64, mode64);
         self.send_and_check(brom::BSL_CMD_START_DATA, &sel)?;
@@ -362,9 +352,7 @@ mod tests {
 
         let fdl1 = vec![0xAA; 2048];
         let fdl2 = vec![0xBB; 2048];
-        let ver = s
-            .boot(&fdl1, 0x65000800, &fdl2, 0x9EFFFE00, None)
-            .unwrap();
+        let ver = s.boot(&fdl1, 0x65000800, &fdl2, 0x9EFFFE00, None).unwrap();
         assert!(!ver.is_empty());
     }
 

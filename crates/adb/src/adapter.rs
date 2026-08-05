@@ -157,9 +157,8 @@ mod tests {
 
     #[test]
     fn shell_runs_command_and_returns_stdout() {
-        let fake = write_fake_adb(
-            "@echo off\r\nif \"%~4\"==\"echo hello\" echo hello-from-device\r\n",
-        );
+        let fake =
+            write_fake_adb("@echo off\r\nif \"%~4\"==\"echo hello\" echo hello-from-device\r\n");
         let adapter = AdbAdapter::new(fake);
         let out = adapter.shell("R5CX123", "echo hello").unwrap();
         assert!(out.contains("hello-from-device"));

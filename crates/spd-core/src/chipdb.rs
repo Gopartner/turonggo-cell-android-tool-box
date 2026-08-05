@@ -44,8 +44,7 @@ impl ChipConfig {
 fn parse_hex(s: Option<&str>) -> crate::Result<u32> {
     let s = s.ok_or_else(|| crate::protocol_err!("missing address in chip.cfg"))?;
     let clean = s.trim_start_matches("0x").trim_start_matches("0X");
-    u32::from_str_radix(clean, 16)
-        .map_err(|_| crate::protocol_err!("invalid address: {s}"))
+    u32::from_str_radix(clean, 16).map_err(|_| crate::protocol_err!("invalid address: {s}"))
 }
 
 #[cfg(test)]

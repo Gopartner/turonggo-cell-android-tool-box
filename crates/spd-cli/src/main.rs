@@ -80,11 +80,7 @@ fn run(args: Vec<String>) -> spd_core::Result<()> {
                 }
                 chip = match args[i].as_str() {
                     "ums9230" => ChipConfig::ums9230(),
-                    other => {
-                        return Err(spd_core::Error::Other(format!(
-                            "unknown chip: {other}"
-                        )))
-                    }
+                    other => return Err(spd_core::Error::Other(format!("unknown chip: {other}"))),
                 };
             }
             "--mock" => mock = true,
@@ -134,13 +130,7 @@ fn run(args: Vec<String>) -> spd_core::Result<()> {
             session.verbose = true;
             let fdl1 = vec![0xAA; 1024];
             let fdl2 = vec![0xBB; 1024];
-            let ver = session.boot(
-                &fdl1,
-                cli.chip.fdl1_addr,
-                &fdl2,
-                cli.chip.fdl2_addr,
-                None,
-            )?;
+            let ver = session.boot(&fdl1, cli.chip.fdl1_addr, &fdl2, cli.chip.fdl2_addr, None)?;
             println!("connected, BROM ver: {ver}");
             Ok(())
         }
@@ -163,9 +153,7 @@ fn run(args: Vec<String>) -> spd_core::Result<()> {
                 .iter()
                 .find(|p| p.name == name)
                 .map(|p| p.size)
-                .ok_or_else(|| {
-                    spd_core::Error::Other(format!("partition not found: {name}"))
-                })?;
+                .ok_or_else(|| spd_core::Error::Other(format!("partition not found: {name}")))?;
             let fname = format!("{name}.bin");
             let mut f = std::fs::File::create(&fname)?;
             let read = session.dump_partition(&name, 0, size, DEFAULT_BLK_SIZE, &mut f)?;
@@ -184,9 +172,7 @@ fn run(args: Vec<String>) -> spd_core::Result<()> {
         }
         "write" => {
             if cli.args.len() < 2 {
-                return Err(spd_core::Error::Other(
-                    "write needs: <name> <file>".into(),
-                ));
+                return Err(spd_core::Error::Other("write needs: <name> <file>".into()));
             }
             let name = &cli.args[0];
             let data = std::fs::read(&cli.args[1])?;
@@ -242,11 +228,7 @@ fn detect_cmd() -> app_core::Result<()> {
     for w in &s.warnings {
         eprintln!("[warn] {w}");
     }
-    println!(
-        "devices: {} (scan {} ms)",
-        s.devices.len(),
-        s.last_scan_ms
-    );
+    println!("devices: {} (scan {} ms)", s.devices.len(), s.last_scan_ms);
     for d in &s.devices {
         println!("  {:<20} {:<14} {}", d.serial, d.state, d.mode.label());
     }
@@ -276,7 +258,9 @@ fn adb_info_cmd(serial: Option<&String>) -> app_core::Result<()> {
                 .iter()
                 .find(|d| d.state == "device")
                 .map(|d| d.serial.clone())
-                .ok_or_else(|| app_core::Error::Other("tidak ada device ADB aktif; berikan serial".into()))?;
+                .ok_or_else(|| {
+                    app_core::Error::Other("tidak ada device ADB aktif; berikan serial".into())
+                })?;
             println!("using device: {serial}");
             serial
         }
