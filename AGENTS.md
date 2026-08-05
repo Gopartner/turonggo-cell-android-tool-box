@@ -119,6 +119,8 @@ lintas scope dilakukan lewat file `docs/REQUESTS.md`.
 
 ## Saat mengerjakan
 
+0. Ikuti alur VCA: baca `CONTRIBUTING.md` (trunk-based, conventional commits,
+   PR wajib, update `docs/API.md` lebih dulu). Jangan commit langsung ke `main`.
 1. Baca `docs/BACKEND.md` dulu untuk status, pemetaan PRD (§8), & roadmap (§9).
 2. Baca `docs/FRONTEND-FLOW.md` untuk alur & kontrak IPC target.
 3. Back-end: rujuk `docs/API.md` untuk kontrak command/event & tipe yang sudah

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Diskusi kontrak API
+    url: https://github.com/Gopartner/spd-backup-tool/issues
+    about: Ketidaksesuaian spesifikasi atau masukan terkait API dibahas lewat Issue.

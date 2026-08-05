@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
+          package-name: spd-backup-tool
+          changelog-types: >
+            [{"type":"feat","section":"Fitur baru","hidden":false},
+             {"type":"fix","section":"Perbaikan bug","hidden":false},
+             {"type":"perf","section":"Performa","hidden":false},
+             {"type":"docs","section":"Dokumentasi","hidden":false},
+             {"type":"refactor","section":"Refactor","hidden":false},
+             {"type":"chore","section":"Chore","hidden":false},
+             {"type":"build","section":"Build","hidden":false},
+             {"type":"test","section":"Test","hidden":false}]
+
+  build-release:
+    name: Build binary release
+    runs-on: windows-latest
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install front-end dependencies
+        run: npm ci
+      - name: Build Tauri app (release)
+        run: npm run tauri build
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          files: src-tauri/target/release/bundle/nsis/*.exe
