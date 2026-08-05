@@ -148,7 +148,7 @@ pub fn select_partition(name: &str, size: u64, mode64: bool) -> Vec<u8> {
 /// dalam "unit" yang perlu dikonversi via divisor (awal 10).
 pub fn parse_partition_table(data: &[u8]) -> crate::Result<Vec<Partition>> {
     let len = data.len();
-    if len % PARTITION_ENTRY_SIZE != 0 {
+    if !len.is_multiple_of(PARTITION_ENTRY_SIZE) {
         return Err(crate::protocol_err!(
             "partition table not divisible by struct size (0x{len:x})"
         ));
